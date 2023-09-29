@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Exercício 2</title>
-    <link rel="stylesheet" type="text/css" href="css/meuestilo.css">
+    <link rel="stylesheet" type="text/css" href="/meuestilo.css">
 </head>
 <body>
     
