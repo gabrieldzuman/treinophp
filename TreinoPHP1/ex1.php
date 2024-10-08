@@ -1,58 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Exercício 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculo de Aumento Salarial</title>
     <link rel="stylesheet" type="text/css" href="/meuestilo.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h3 {
+            color: #333;
+        }
+        form {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .resultado {
+            margin-top: 20px;
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    
-    <h1>Exercício 1</h1>
+    <h1>Calculadora de Aumento Salarial</h1>
 
     <?php include_once 'menu.php'; ?>
 
-    <h3>Calcular o aumento que será dado a um funcionário, obtendo
-        do usuário as seguintes informações: salário atual e a porcentagem
-        de aumento. Apresentar p novo valor do salário e o valor do aumento.
-    </h3>
+    <h3>Calcule o aumento que será dado a um funcionário:</h3>
 
-    <form action="ex1.php" method="post">
+    <form action="" method="post">
+        <label for="salario">Salário atual (R$):</label>
+        <input type="number" name="salario" id="salario" min="800" max="10000" step="0.01" required>
 
-        <p>
-            <label>Salário atual</label><br>
-            <input type="number" name="salario" min="800" max="10000" step="0.01" required>
+        <label for="porcentagem">Porcentagem de aumento (%):</label>
+        <input type="number" name="porcentagem" id="porcentagem" min="1" max="100" step="0.01" required>
 
-        </p>
-
-        <p>
-            <label>Porcentagem de aumento</label><br>
-            <input type="number" name="porcentagem" min="1" max="100" step="0.01" required>
-        </p>
-
-        <p>
-            <button type="submit" name="calcular">Calcular</button>
-        </p>
-
+        <button type="submit" name="calcular">Calcular</button>
     </form>
 
     <?php
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['calcular'])) {
+        $salario = filter_input(INPUT_POST, 'salario', FILTER_VALIDATE_FLOAT);
+        $porcentagem = filter_input(INPUT_POST, 'porcentagem', FILTER_VALIDATE_FLOAT);
 
-    //verificar se o formulário foi enviado   
-    if (isset($_POST['calcular']))
-    {
-        //receber os dados do formulário e armazenar nas respectivas variáveis
-        $salario = $_POST['salario'];
-        $porcentagem = $_POST['porcentagem'];
+        if ($salario !== false && $porcentagem !== false) {
+            $aumento = $salario * ($porcentagem / 100);
+            $salario_final = $salario + $aumento;
 
-        //processamento
-        $aumento = $salario * ($porcentagem/100);
-        $salario_final = $salario + $aumento;
-
-        //saída de dados
-        echo "<h4>Seu salário final é de R$ $salario_final. Você teve um aumento
-        de R$ $aumento.</h4>";
+            echo "<div class='resultado'>";
+            echo "<h4>Resultado:</h4>";
+            echo "Seu salário final é de R$ " . number_format($salario_final, 2, ',', '.') . ".<br>";
+            echo "Você teve um aumento de R$ " . number_format($aumento, 2, ',', '.') . ".";
+            echo "</div>";
+        } else {
+            echo "<div class='resultado' style='color: red;'>Valores inválidos. Por favor, insira números válidos.</div>";
+        }
     }
     ?>
-
 </body>
 </html>
